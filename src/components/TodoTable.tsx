@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import Table from '@material-ui/core/Table';
@@ -7,35 +7,98 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TalbeContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Checkbox from '@material-ui/core/Checkbox';
 import { format } from 'date-fns';
 
 import { tasksState } from '../atoms/Tasks';
 
 export default function TodoTalbe() {
     const [tasks, setTasks] = useRecoilState(tasksState);
+    const [selected, setSelected] = useState<number[]>([]);
+
+    // すべてのタスクを選択する
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.checked) {
+            setSelected([...Array(tasks.length).keys()]);
+            return;
+        }
+        setSelected([]);
+    };
+
+    // 特定のタスクを選択する
+    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, i: number) => {
+        const selectedIndex = selected.indexOf(i);
+        let newSelected: number[] = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, i);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1)
+            );
+        }
+        setSelected(newSelected);
+    }
+
+    // 選択したタスクを消去する
+    const handleDelete = () => {
+        let newTasks = tasks.filter(
+            (e: object, i: number) => selected.indexOf(i) === -1
+        );
+        setTasks(newTasks);
+        setSelected([]);
+    }
 
     return (
-        <TalbeContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>タスク</TableCell>
-                        <TableCell align="center">期日</TableCell>
-                        <TableCell align="center">優先度</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tasks.map((task: any) => (
+        <>
+            <IconButton
+              onClick={handleDelete}
+              disabled={selected.length === 0}
+              aria-label="delete"
+            >
+                <DeleteIcon />
+            </IconButton>
+            <TalbeContainer>
+                <Table>
+                    <TableHead>
                         <TableRow>
-                            <TableCell>{task.content}</TableCell>
-                            <TableCell align="center">
-                                {format(task.deadline, 'yyyy/MM/dd')}
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                  checked={tasks.length > 0 && tasks.length ===selected.length}
+                                  onChange={handleSelectAll}
+                                />
                             </TableCell>
-                            <TableCell align="center">{task.priority}</TableCell>
+                            <TableCell>タスク</TableCell>
+                            <TableCell align="center">期日</TableCell>
+                            <TableCell align="center">優先度</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TalbeContainer>
+                    </TableHead>
+                    <TableBody>
+                        {tasks.map((task: any, index :number) => (
+                            <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                      checked={selected.indexOf(index) !== -1}
+                                      onChange={(e: any) => handleCheck(e, index)}
+                                    />
+                                </TableCell>
+                                <TableCell>{task.content}</TableCell>
+                                <TableCell align="center">
+                                    {format(task.deadline, 'yyyy/MM/dd')}
+                                </TableCell>
+                                <TableCell align="center">{task.priority}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TalbeContainer>
+        </>
     );
 }

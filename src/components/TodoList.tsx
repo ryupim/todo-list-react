@@ -37,8 +37,6 @@ export default function TodoList() {
     const tasks = useRecoilValue(tasksState);
     const [open, setOpen] = useState<boolean>(false);
 
-    console.log(tasks);
-
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
