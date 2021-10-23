@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import TodoTable from './TodoTable';
+import Expired from './Expired';
 import { tasksState } from '../atoms/Tasks';
 
 
@@ -45,6 +46,7 @@ export default function TodoList() {
             <Box padding="2rem" textAlign="center">
                 {tasks.length !== 0 ? (
                     <>
+                        <Expired />
                         <TodoTable />
                         <Fab
                             className={classes.fab}
