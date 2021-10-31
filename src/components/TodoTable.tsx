@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TalbeContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip'
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 import { format } from 'date-fns';
@@ -83,13 +84,17 @@ export default function TodoTalbe() {
 
     return (
         <>
-            <IconButton
-              onClick={handleDelete}
-              disabled={selected.length === 0}
-              aria-label="delete"
-            >
-                <DeleteIcon />
-            </IconButton>
+            <div className='deleteButton'>
+                <Tooltip title='削除' arrow>
+                    <IconButton
+                    onClick={handleDelete}
+                    disabled={selected.length === 0}
+                    aria-label="delete"
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            </div>
             <TalbeContainer>
                 <Table>
                     <TableHead>

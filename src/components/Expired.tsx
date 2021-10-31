@@ -38,7 +38,7 @@ function lowerThanDate(date1: Date, date2: Date): boolean {
 
     var year2 = date2.getFullYear();
     var month2= date2.getMonth() + 1;
-    var day2 = date2.getDate()+3;
+    var day2 = date2.getDate();
 
     if (year1 == year2) {
         if (month1 == month2) {
