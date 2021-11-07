@@ -11,8 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.deleteButton {
-  display: flex;
-  justify-content: flex-end;
-}

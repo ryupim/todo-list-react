@@ -24,6 +24,7 @@ export default function RegisterDialog({ open, onClose }: Props) {
     const taskContent = useRecoilValue(taskContentState);
     const taskDeadline = useRecoilValue(taskDeadlineState);
     const taskPriority = useRecoilValue(taskPriorityState);
+    const taskExpired = false;
     const [tasks, setTasks] = useRecoilState(tasksState);
 
     const handleRegister = () => {
@@ -32,7 +33,8 @@ export default function RegisterDialog({ open, onClose }: Props) {
             {
                 content: taskContent,
                 deadline: taskDeadline,
-                priority: taskPriority
+                priority: taskPriority,
+                expired: taskExpired,
             }
         ]);
         onClose();

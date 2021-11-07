@@ -1,8 +1,14 @@
 import { atom } from 'recoil';
 
-export const tasksState = atom<
-    { content: string; deadline: any; priority: number }[]
-    >({
-        key: 'tasksState',
-        default: []
-    });
+type TaskType = {
+    content: string,
+    deadline: any,
+    priority: number,
+    expired: boolean
+}
+
+export const tasksState = atom<TaskType[]>
+({
+    key: 'tasksState',
+    default: []
+});

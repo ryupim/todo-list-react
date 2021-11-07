@@ -1,20 +1,34 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import Box from '@material-ui/core/Box';
 import { tasksState } from '../atoms/Tasks';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import UpdateIcon from '@mui/icons-material/Update';
 
 
 export default function Expired() {
-    const tasks = useRecoilValue(tasksState);
-    const today = new Date();
+    const [tasks, setTasks] = useRecoilState(tasksState);
+    let num_expired = 0;
+    tasks.map(task => {
+        if (task.expired) num_expired++;
+    });
 
-    let num_expired:number = 0;
+    const handleScan = () => {
+        const today = new Date();
 
-    for (var task of tasks) {
-        let date = task.deadline;
-        if (lowerThanDate(date, today)) num_expired++;
+        const updateTasks = tasks.map(task => {
+            let updateTask = {...task};
+            let date = task.deadline;
+            if (lowerThanDate(date, today)){
+                updateTask.expired = true;
+            }else {
+                updateTask.expired = false;
+            }
+            return updateTask;
+        });
+        setTasks(updateTasks);
     }
-    console.log(num_expired);
 
     return (
         <Box padding=".5rem" textAlign="center">
@@ -27,6 +41,14 @@ export default function Expired() {
                     <div>現在、期限切れのタスクはありません。</div>
                 </>
             )}
+            <Tooltip title='モックスキャン' arrow>
+            <IconButton
+            onClick={handleScan}
+            aria-label="scan"
+            >
+                <UpdateIcon />
+            </IconButton>
+        </Tooltip>
         </Box>
     );
 }
@@ -40,8 +62,8 @@ function lowerThanDate(date1: Date, date2: Date): boolean {
     var month2= date2.getMonth() + 1;
     var day2 = date2.getDate();
 
-    if (year1 == year2) {
-        if (month1 == month2) {
+    if (year1 === year2) {
+        if (month1 === month2) {
             return day1 < day2;
         }
         else {

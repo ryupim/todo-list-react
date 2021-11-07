@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.deleteButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.expired {
+  font-weight:bold;
+  color: #FF0000;
+}

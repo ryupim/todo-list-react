@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TalbeContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip'
+import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 import { format } from 'date-fns';
@@ -17,7 +17,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { tasksState } from '../atoms/Tasks';
 
 const sortTasks = (
-    arr: { content: string; deadline: any; priority: number}[],
+    arr: { content: string; deadline: any; priority: number; expired: boolean}[],
     sortBy: 'deadline' | 'priority',
     order: 'asc' | 'desc'
 ) => 
@@ -136,9 +136,17 @@ export default function TodoTalbe() {
                                     />
                                 </TableCell>
                                 <TableCell>{task.content}</TableCell>
+                                {task.expired ? (
+                                    <TableCell align="center">
+                                        <div className='expired'>
+                                        {format(task.deadline, 'yyyy/MM/dd')}
+                                        </div>
+                                    </TableCell>
+                                ) : ( 
                                 <TableCell align="center">
                                     {format(task.deadline, 'yyyy/MM/dd')}
                                 </TableCell>
+                                )}
                                 <TableCell align="center">{task.priority}</TableCell>
                             </TableRow>
                         ))}
